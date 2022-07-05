@@ -1,0 +1,64 @@
+name: memory_game
+description: A new Flutter project.
+
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.3 <3.0.0"
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  animated_button: ^0.2.0
+  animated_text_kit: ^4.2.2
+  awesome_dialog: ^2.2.1
+  flip_card: ^0.6.0
+  provider: ^6.0.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - lib/resources/img/background.jpg
+    - lib/resources/img/background-game.jpg
+
+    - lib/resources/img/back-card.jpg
+    - lib/resources/img/banner-memory-game.jpg
+    - lib/resources/img/coins.png
+    - lib/resources/img/roulete.jpg
+    - lib/resources/img/jackpot.jpg
+    - lib/resources/img/credi-juegos.png
+
+    - lib/resources/img/cat/
+    - lib/resources/img/dog/
+    - lib/resources/img/pig/
+    - lib/resources/img/isotipo/
+    - lib/resources/img/banner/
+    - lib/resources/img/points/
+    - lib/resources/img/others/
+
+    - lib/resources/img/sol/cat/
+    - lib/resources/img/sol/money/
+    - lib/resources/img/sol/pig/
+    - lib/resources/img/sol/thinking/
+    - lib/resources/img/sol/winner/
+    - lib/resources/img/sol/working/
+
+
+  fonts:
+    - family: AlfaSlabOne
+      fonts:
+        - asset: fonts/AlfaSlabOne-Regular.ttf
+    - family: ArchivoBlack
+      fonts:
+        - asset: fonts/ArchivoBlack-Regular.ttf
+  
