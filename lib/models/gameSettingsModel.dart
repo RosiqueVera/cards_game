@@ -4,6 +4,8 @@ class GameSettingsModel {
   String? category;
   int? value;
   String? comments;
+  int intents = 0;
+  bool isFinish = false;
 
   //? Constructor del modelo
   GameSettingsModel({

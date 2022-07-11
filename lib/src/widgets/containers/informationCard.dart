@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:memory_game/src/styles/colors.dart';
 
 //? Container para mostrar información al usuario
 Container informationContainer({required Widget child}) {
@@ -8,10 +7,10 @@ Container informationContainer({required Widget child}) {
       horizontal: 15.0,
       vertical: 5.0,
     ),
-    height: 55,
-    width: 110,
+    height: 60,
+    width: 130,
     decoration: BoxDecoration(
-      color: lightYelow,
+      color: Colors.white,
       borderRadius: BorderRadius.circular(15),
       boxShadow: const [
         BoxShadow(

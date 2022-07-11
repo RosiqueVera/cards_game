@@ -1,7 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:memory_game/src/styles/assetImages.dart';
-import 'package:memory_game/src/styles/colors.dart';
 import 'package:memory_game/src/widgets/dialogs/points/convert/convertDialog.dart';
 
 //! Dialog
@@ -14,7 +13,7 @@ AwesomeDialog insufficientsIntents(
     dismissOnBackKeyPress: false,
     dialogType: DialogType.ERROR,
     body: Container(
-      alignment: Alignment(-0.1, 0.1),
+      alignment: const Alignment(-0.1, 0.1),
       padding: const EdgeInsets.only(left: 0),
       height: 220,
       width: 230,

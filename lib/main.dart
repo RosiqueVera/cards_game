@@ -30,7 +30,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Games',
-        theme: ThemeData(primarySwatch: Colors.blue, fontFamily: archivoBlack),
+        theme: ThemeData(
+            primarySwatch: Colors.blue, fontFamily: sourceSansSemiBold),
         initialRoute: 'main',
         routes: {
           'main': (_) => GamesMain(),

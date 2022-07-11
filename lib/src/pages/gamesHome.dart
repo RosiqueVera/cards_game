@@ -1,12 +1,13 @@
 /*
 */
+
+import 'package:animated_button/animated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:memory_game/services/pointsService.dart';
 import 'package:memory_game/src/styles/assetImages.dart';
-import 'package:memory_game/src/styles/colors.dart';
-import 'package:memory_game/src/widgets/dialogs/credipointsDetailsDialog.dart';
+import 'package:memory_game/src/styles/fonts.dart';
 import 'package:memory_game/src/widgets/dialogs/insufficientIntents.dart';
-import 'package:memory_game/src/widgets/dialogs/points/redeemDialog.dart';
+import 'package:memory_game/src/widgets/sliderPoints.dart';
 import 'package:memory_game/src/widgets/dialogs/rules/rulesDialog.dart';
 import 'package:provider/provider.dart';
 
@@ -15,144 +16,128 @@ class GamesHome extends StatelessWidget {
   Widget build(BuildContext context) {
     final GamesService gamesService = Provider.of<GamesService>(context);
     return Scaffold(
-      backgroundColor: lightYelow,
+      backgroundColor: Colors.blueGrey.shade50,
       extendBodyBehindAppBar: true,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-              automaticallyImplyLeading: false,
-              pinned: true,
-              snap: false,
-              floating: true,
-              centerTitle: true,
-              expandedHeight: 180.0,
-              backgroundColor: Colors.transparent,
-              leading: IconButton(
-                onPressed: () => Navigator.of(context).pop(),
-                icon: Icon(Icons.arrow_back_ios_rounded),
-              ),
-              title: const Text(
-                'SALA DE JUEGOS',
-                style: TextStyle(color: blackGray, fontSize: 18),
-              ),
-              actions: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: Container(
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.only(right: 15),
-                    padding: const EdgeInsets.fromLTRB(15, 6, 20, 6),
-                    decoration: const BoxDecoration(
-                      color: Colors.black26,
-                      borderRadius: BorderRadiusDirectional.horizontal(
-                        start: Radius.circular(10),
-                      ),
-                    ),
-                    child: GestureDetector(
-                      child: const Text(
-                        'Reglas',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'calibri',
-                        ),
-                      ),
-                      onTap: () => rulesDialog(context).show(),
-                    ),
+            automaticallyImplyLeading: false,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(backgroundHeader),
+                    fit: BoxFit.cover,
                   ),
-                )
-              ],
-              flexibleSpace: FlexibleSpaceBar(
-                background: Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [
-                          Color.fromARGB(255, 231, 205, 247),
-                          Color.fromARGB(255, 127, 101, 243)
-                        ],
-                        tileMode: TileMode.mirror,
-                        begin: FractionalOffset.topCenter,
-                        end: FractionalOffset.bottomRight),
-                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 60),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const SizedBox(
-                        height: 60,
-                      ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          const Image(
-                            image: AssetImage(
-                              coins,
-                            ),
-                            height: 30,
-                            color: lightYelow,
-                          ),
-                          const SizedBox(
-                            width: 8,
-                          ),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
                                 gamesService.customer.points.toString(),
-                                textAlign: TextAlign.center,
                                 style: const TextStyle(
-                                  fontSize: 45,
-                                  color: lightYelow,
+                                  fontSize: 50,
+                                  color: Colors.white,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 2,
+                                      color: Colors.black45,
+                                      offset: Offset(2, 2),
+                                    )
+                                  ],
                                 ),
                               ),
                               const Text(
                                 'CrediPuntos',
-                                style: TextStyle(color: Colors.black54),
-                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontFamily: sourceSansSemiBold,
+                                  color: Colors.white,
+                                ),
+                              )
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                gamesService.customer.intents.toString(),
+                                style: const TextStyle(
+                                  fontSize: 50,
+                                  color: Colors.white,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 2,
+                                      color: Colors.black45,
+                                      offset: Offset(2, 2),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const Text(
+                                'Intentos',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontFamily: sourceSansSemiBold,
+                                  color: Colors.white,
+                                ),
                               )
                             ],
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 10,
+                      Container(
+                        padding: const EdgeInsets.all(5),
+                        margin: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.white12,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: gamesService.customer.points! >=
+                                gamesService.customer.pointsPerGame!
+                            ? const SliderConvertPoints()
+                            : null,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              primary: Color.fromARGB(255, 154, 101, 229),
-                              side: const BorderSide(
-                                width: 2,
-                                color: Colors.white,
-                              ),
-                            ),
-                            onPressed: () =>
-                                crediPointsDetailDialog(context).show(),
-                            child: const Text('Detalles'),
-                          ),
-                          ElevatedButton(
-                            style: TextButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                primary: Colors.deepPurple),
-                            onPressed: () => redeemPointsDialog(context).show(),
-                            child: const Text(
-                              'Canjear',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 154, 101, 229),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
                     ],
                   ),
                 ),
-                collapseMode: CollapseMode.parallax,
-              )),
+              ),
+            ),
+            pinned: true,
+            snap: false,
+            floating: true,
+            expandedHeight: 300.0,
+            //backgroundColor: Colors.transparent,
+            leading: IconButton(
+              onPressed: () => Navigator.of(context).pop(),
+              icon: const Icon(Icons.arrow_back_ios_rounded),
+            ),
+
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 30),
+                child: AnimatedButton(
+                  onPressed: () => rulesDialog(context).show(),
+                  color: Colors.deepPurple.shade400,
+                  height: 40,
+                  width: 140,
+                  child: const Text(
+                    'Ayuda',
+                    style: TextStyle(fontSize: 22),
+                  ),
+                ),
+              )
+            ],
+          ),
           SliverList(
             delegate: SliverChildListDelegate(
               [
@@ -162,50 +147,52 @@ class GamesHome extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                          height: 180,
-                          width: 500,
-                          alignment: const Alignment(1.1, 1.1),
-                          margin: const EdgeInsets.all(25.0),
+                        height: 180,
+                        width: 500,
+                        alignment: const Alignment(1.1, 1.1),
+                        margin: const EdgeInsets.all(25.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: const [
+                            BoxShadow(
+                                blurRadius: 7,
+                                offset: Offset(3, 5),
+                                color: Colors.black38)
+                          ],
+                          image: const DecorationImage(
+                            image: AssetImage(bannerFirstGame),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.zero,
+                          padding: EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: const [
-                              BoxShadow(
-                                  blurRadius: 7,
-                                  offset: Offset(3, 5),
-                                  color: Colors.black38)
-                            ],
-                            image: const DecorationImage(
-                              image: AssetImage(bannerFirstGame),
-                              fit: BoxFit.cover,
+                            color: Color.fromARGB(255, 5, 175, 130),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: IconButton(
+                            splashColor: Colors.white,
+                            splashRadius: 10,
+                            iconSize: 30,
+                            color: Colors.white,
+                            onPressed: () {
+                              gamesService.customer.intents! > 0
+                                  ? {
+                                      Navigator.of(context)
+                                          .pushNamed('cardsGame'),
+                                      gamesService.playGame(0),
+                                    }
+                                  : insufficientsIntents(
+                                          context: context, cancelFuntion: null)
+                                      .show();
+                            },
+                            icon: const Icon(
+                              Icons.play_arrow_rounded,
                             ),
                           ),
-                          child: Container(
-                            margin: EdgeInsets.zero,
-                            padding: EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 5, 175, 130),
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                            child: IconButton(
-                                splashColor: Colors.white,
-                                splashRadius: 10,
-                                color: Colors.white,
-                                onPressed: () {
-                                  gamesService.customer.intents! > 0
-                                      ? {
-                                          gamesService.playGame(),
-                                          Navigator.of(context)
-                                              .pushNamed('cardsGame'),
-                                        }
-                                      : insufficientsIntents(
-                                              context: context,
-                                              cancelFuntion: null)
-                                          .show();
-                                },
-                                icon: Icon(
-                                  Icons.play_arrow_rounded,
-                                )),
-                          )),
+                        ),
+                      ),
                       Container(
                         height: 150,
                         width: 280,

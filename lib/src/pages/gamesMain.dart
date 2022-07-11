@@ -1,14 +1,10 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:memory_game/models/customerModel.dart';
-import 'package:memory_game/services/pointsService.dart';
-import 'package:memory_game/src/styles/assetImages.dart';
-import 'package:memory_game/src/styles/colors.dart';
-import 'package:memory_game/src/styles/fonts.dart';
+
+import 'package:memory_game/src/widgets/animtedText.dart';
 import 'package:memory_game/src/widgets/background.dart';
 import 'package:animated_button/animated_button.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:memory_game/src/widgets/containers/pointsAndIntents.dart';
-import 'package:provider/provider.dart';
 
 class GamesMain extends StatelessWidget {
   @override
@@ -17,62 +13,50 @@ class GamesMain extends StatelessWidget {
       widget: Column(
         children: [
           Container(
-            padding: EdgeInsets.only(top: 60),
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: IntentsAndPoints(),
+            height: MediaQuery.of(context).size.height * 0.3,
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: IntentsAndPoints(
+                primaryColor: Colors.deepPurple,
+                secondaryColor: Colors.deepPurple.shade400,
               ),
             ),
           ),
-          Padding(
-              padding: EdgeInsets.only(top: 80),
-              child: AnimatedTextKit(
-                animatedTexts: [
-                  WavyAnimatedText(
-                    speed: Duration(milliseconds: 150),
-                    'CREDI - JUEGOS',
-                    textStyle: TextStyle(
-                      color: Colors.indigo.shade900,
-                      fontSize: 32,
-                      fontFamily: alfaSlab,
-                    ),
-                  ),
-                ],
-                isRepeatingAnimation: true,
-                repeatForever: true,
-              )),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
-            child: SizedBox(
-              height: 120,
-              child: Image.asset(isotipo, color: blackGray),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.3,
+            alignment: Alignment.center,
+            child: animateText(
+              text1: 'CREDI',
+              fontSize: 48,
+              color: Colors.white,
             ),
           ),
-          const Text(
-            'Gana CrediPuntos en diversos juegos',
-            style: TextStyle(color: blackGray, fontSize: 18),
-            textAlign: TextAlign.center,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 50),
-            child: AnimatedButton(
-              child: const Text(
-                'Jugar',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
+          Container(
+            alignment: Alignment.center,
+            height: MediaQuery.of(context).size.height * 0.2,
+            child: Pulse(
+              delay: const Duration(seconds: 2),
+              duration: const Duration(seconds: 5),
+              infinite: true,
+              child: AnimatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed('home');
+                },
+                color: Colors.deepPurpleAccent,
+                height: 40,
+                width: 175,
+                duration: 90,
+                child: const Text(
+                  'Entrar',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
                 ),
               ),
-              onPressed: () {
-                Navigator.of(context).pushNamed('home');
-              },
-              color: const Color.fromARGB(255, 3, 170, 131),
-              height: 50,
-              width: 190,
-              duration: 90,
             ),
-          )
+          ),
         ],
       ),
     );

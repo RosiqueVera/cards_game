@@ -1,11 +1,14 @@
+import 'package:flip_card/flip_card.dart';
+import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:memory_game/models/gameSettingsModel.dart';
+import 'package:memory_game/services/gameCardSettingsService.dart';
 import 'package:memory_game/services/pointsService.dart';
 import 'package:memory_game/src/styles/assetImages.dart';
+import 'package:memory_game/src/styles/colors.dart';
 import 'package:memory_game/src/styles/fonts.dart';
 import 'package:memory_game/src/widgets/containers/games/cardsBoard.dart';
+import 'package:memory_game/src/widgets/containers/pointsAndIntents.dart';
 import 'package:memory_game/src/widgets/dialogs/confirmActionDialog.dart';
-import 'package:memory_game/src/widgets/dialogs/points/convert/convertDialog.dart';
 import 'package:provider/provider.dart';
 
 // TODO: Pagina principal
@@ -14,13 +17,10 @@ import 'package:provider/provider.dart';
 class CardsGame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final GamesService gamesService =
-        Provider.of<GamesService>(context, listen: true);
-    GameSettingsModel gameSettingsModel = GameSettingsModel(
-      category: 'Juego de cartas',
-      comments: 'Encuentra a Sol dorada y gana',
-      value: 2,
-    );
+    final GameCardSettingsService gameCardSettingsService =
+        Provider.of<GameCardSettingsService>(context);
+    final GamesService gamesService = Provider.of<GamesService>(context);
+    final FlipCardController cardController = FlipCardController();
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -29,7 +29,10 @@ class CardsGame extends StatelessWidget {
         leading: IconButton(
           onPressed: () => confirmActionDialog(
             context: context,
-            success: () => Navigator.of(context).pop(),
+            success: () {
+              Navigator.of(context).pop();
+              gameCardSettingsService.resetGame();
+            },
             successText: 'Salir',
             cancel: () {},
             cancelText: 'Cancelar',
@@ -38,32 +41,39 @@ class CardsGame extends StatelessWidget {
           ).show(),
           icon: const Icon(Icons.arrow_back_ios_rounded),
           color: Colors.white,
+          iconSize: 30,
         ),
-        title: const Text(
-          'Intentos:',
+        title: Text(
+          !gameCardSettingsService.isFinish
+              ? 'Encuentra a Sol'
+              : 'Voltea las cartas',
           style: TextStyle(
             fontSize: 25,
           ),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(
-              right: 15,
-            ),
-            child: GestureDetector(
-              onTap: () => convertPointsDialog(context).show(),
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Text(
-                  '${gamesService.customer.intents}',
-                  style: const TextStyle(
-                    fontSize: 25,
-                    fontFamily: alfaSlab,
-                  ),
-                ),
-              ),
-            ),
-          )
+          gameCardSettingsService.isFinish
+              ? IconButton(
+                  onPressed: () => confirmActionDialog(
+                    context: context,
+                    success: () {
+                      gameCardSettingsService.resetGame();
+                      gamesService.playNextIntent(1);
+                      Navigator.of(context).pushReplacementNamed('cardsGame');
+                    },
+                    successText: 'Nuevo juego',
+                    cancel: () => Navigator.of(context).pop(),
+                    cancelText: 'Salir',
+                    title: 'Nuevo juego',
+                    desc:
+                        'Estas a punto de empezar un juego nuevo, si no cuentas con un intento disponible, se descontará lo equivalente de tus puntos.',
+                  ).show(),
+                  icon: const Icon(Icons.replay_circle_filled_outlined),
+                  iconSize: 30,
+                  splashRadius: 20,
+                  splashColor: const Color.fromRGBO(255, 216, 215, 1),
+                )
+              : Container(),
         ],
       ),
       extendBodyBehindAppBar: true,
@@ -72,11 +82,13 @@ class CardsGame extends StatelessWidget {
         height: double.infinity,
         width: double.infinity,
         decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(
-              backgroundCardGame,
-            ),
-            fit: BoxFit.fill,
+          gradient: LinearGradient(
+            colors: [
+              Color.fromRGBO(255, 216, 215, 1),
+              Color.fromRGBO(163, 124, 181, 1),
+            ],
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
           ),
         ),
         child: SafeArea(
@@ -85,23 +97,47 @@ class CardsGame extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CardsBoard(),
-                Card(
-                  borderOnForeground: true,
-                  child: Container(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Image(image: AssetImage(coup), height: 80),
-                        Column(
+                IntentsAndPoints(
+                  primaryColor: blackGray,
+                  secondaryColor: Colors.grey.shade700,
+                ),
+                CardsBoard(
+                  flipCardController: cardController,
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const Image(image: AssetImage(coup), width: 30),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
                           children: [
-                            Text('${gameSettingsModel.comments}'),
-                            Text('${gameSettingsModel.value} CrediPuntos')
+                            Text(
+                              '${gameCardSettingsService.cardGameSettings.comments}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontFamily: sourceSansBlack,
+                              ),
+                            ),
+                            Text(
+                              '${gameCardSettingsService.cardGameSettings.value} CrediPuntos',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontFamily: sourceSansBlack,
+                              ),
+                            ),
                           ],
-                        )
-                      ],
-                    ),
+                        ),
+                      ),
+                      const Image(image: AssetImage(coup), width: 30),
+                    ],
                   ),
                 ),
               ],

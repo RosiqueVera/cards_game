@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memory_game/src/styles/assetImages.dart';
+import 'package:memory_game/src/widgets/bottomMain.dart';
 
 //!Background
 //?Widget para mostrar el fondo de pantalla
@@ -11,6 +12,7 @@ class BackgroundWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        padding: EdgeInsets.zero,
         margin: EdgeInsets.zero,
         height: double.infinity,
         width: double.infinity,
@@ -20,7 +22,13 @@ class BackgroundWidget extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: widget,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            widget,
+            bottomMain(context),
+          ],
+        ),
       ),
     );
   }

@@ -1,15 +1,18 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:memory_game/services/gameCardSettingsService.dart';
 import 'package:memory_game/services/pointsService.dart';
 import 'package:memory_game/src/styles/assetImages.dart';
 import 'package:memory_game/src/styles/colors.dart';
 import 'package:memory_game/src/widgets/dialogs/confirmActionDialog.dart';
-import 'package:memory_game/src/widgets/dialogs/points/convert/sliderPoints.dart';
+import 'package:memory_game/src/widgets/dialogs/points/convert/pointsToConvertDialog.dart';
 import 'package:provider/provider.dart';
 
 AwesomeDialog convertPointsDialog(BuildContext context) {
   final GamesService gamesService =
       Provider.of<GamesService>(context, listen: false);
+  final GameCardSettingsService gameCardSettingsService =
+      Provider.of<GameCardSettingsService>(context, listen: false);
   return AwesomeDialog(
     context: context,
     dialogType: DialogType.INFO_REVERSED,
@@ -32,7 +35,10 @@ AwesomeDialog convertPointsDialog(BuildContext context) {
               ),
               boxShadow: [
                 BoxShadow(
-                    blurRadius: 5, offset: Offset(2, 3), color: Colors.black54)
+                  blurRadius: 5,
+                  offset: Offset(2, 3),
+                  color: Colors.black54,
+                )
               ]),
         ),
         const Text(
@@ -42,32 +48,26 @@ AwesomeDialog convertPointsDialog(BuildContext context) {
           ),
           textAlign: TextAlign.center,
         ),
-        SliderConvertPoints(),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text('Mínimo'),
-              Text('Máximo'),
-            ],
-          ),
-        )
+        PointsToConvert(),
       ],
     ),
     btnOkText: 'Aceptar',
-    btnOkOnPress: () => confirmActionDialog(
-      context: context,
-      success: () {
-        gamesService.convertPoints();
-      },
-      successText: 'Convertir',
-      cancel: () {},
-      cancelText: 'Cancelar',
-      title:
-          '¿Estás seguro de convertir ${gamesService.customer.pointsToConvert} CrediPuntos a intentos de juego?',
-    ).show(),
+    btnOkOnPress: () => gamesService.customer.pointsToConvert != null
+        ? confirmActionDialog(
+            context: context,
+            success: () {
+              gamesService.convertPoints();
+            },
+            successText: 'Convertir',
+            cancel: () => gamesService.cleanPointsToConvert(),
+            cancelText: 'Cancelar',
+            title:
+                '¿Estás seguro de convertir ${gamesService.customer.pointsToConvert} CrediPuntos a intentos de juego?',
+          ).show()
+        : convertPointsDialog(context).show(),
     btnCancelText: 'Cancelar',
-    btnCancelOnPress: () => null,
+    btnCancelOnPress: () {
+      gameCardSettingsService.resetIntents();
+    },
   );
 }

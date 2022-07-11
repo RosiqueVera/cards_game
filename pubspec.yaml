@@ -19,6 +19,8 @@ dependencies:
   awesome_dialog: ^2.2.1
   flip_card: ^0.6.0
   provider: ^6.0.3
+  animate_do: ^2.1.0
+  bottom_sheet: ^3.1.1
 
 dev_dependencies:
   flutter_test:
@@ -42,6 +44,7 @@ flutter:
     - lib/resources/img/dog/
     - lib/resources/img/pig/
     - lib/resources/img/isotipo/
+    - lib/resources/img/logotipo/
     - lib/resources/img/banner/
     - lib/resources/img/points/
     - lib/resources/img/others/
@@ -61,4 +64,26 @@ flutter:
     - family: ArchivoBlack
       fonts:
         - asset: fonts/ArchivoBlack-Regular.ttf
+    
+    - family: SourceSansPro-Black
+      fonts:
+        - asset: fonts/SourceSansPro-Black.ttf
+    - family: SourceSansPro-Bold
+      fonts:
+        - asset: fonts/SourceSansPro-Bold.ttf
+    - family: SourceSansPro-ExtraLight
+      fonts:
+        - asset: fonts/SourceSansPro-ExtraLight.ttf
+    - family: SourceSansPro-Italic
+      fonts:
+        - asset: fonts/SourceSansPro-Italic.ttf
+    - family: SourceSansPro-Light
+      fonts:
+        - asset: fonts/SourceSansPro-Light.ttf
+    - family: SourceSansPro-Regular
+      fonts:
+        - asset: fonts/SourceSansPro-Regular.ttf
+    - family: SourceSansPro-SemiBold
+      fonts:
+        - asset: fonts/SourceSansPro-SemiBold.ttf
   

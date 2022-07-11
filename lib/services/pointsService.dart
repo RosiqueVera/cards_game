@@ -7,7 +7,7 @@ class GamesService with ChangeNotifier {
   Customer? _customer = Customer(
     intents: 5,
     points: 105,
-    pointsPerGame: 1,
+    pointsPerGame: 5,
     pay: 100,
   );
 
@@ -29,12 +29,19 @@ class GamesService with ChangeNotifier {
     notifyListeners();
   }
 
+  //? Método para volver a 0 los puntos a convertir
+  void cleanPointsToConvert() {
+    _customer?.pointsToConvert = 0;
+    notifyListeners();
+  }
+
   //? Método para convertir puntos a intentos de juegos
   void convertPoints() {
     int pointsToConvert =
         _customer!.pointsToConvert! ~/ _customer!.pointsPerGame!;
     _customer?.intents = _customer!.intents! + pointsToConvert;
-    _customer?.points = (_customer!.points! - pointsToConvert);
+    _customer?.points = (_customer!.points! - _customer!.pointsToConvert!);
+    _customer?.pointsToConvert = 0;
     notifyListeners();
   }
 
@@ -51,8 +58,18 @@ class GamesService with ChangeNotifier {
   }
 
   //? Método para quemar un intento de juego
-  void playGame() {
-    _customer?.intents = _customer!.intents! - _customer!.pointsPerGame!;
+  void playGame(int intents) {
+    _customer?.intents = _customer!.intents! - (1 + intents);
+    notifyListeners();
+  }
+
+  void playNextIntent(int intents) {
+    if (_customer!.intents! >= intents) {
+      _customer?.intents = _customer!.intents! - intents;
+    } else if ((_customer!.points! / _customer!.pointsPerGame!) > intents) {
+      _customer?.points =
+          _customer!.points! - (_customer!.pointsPerGame! * intents);
+    }
     notifyListeners();
   }
 }

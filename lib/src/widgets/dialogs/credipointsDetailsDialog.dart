@@ -55,7 +55,9 @@ AwesomeDialog crediPointsDetailDialog(BuildContext context) {
               ),
             ],
           ),
-        )
+        ),
+        const Divider(),
+        Text('${gamesService.customer.pointsPerGame} CrediPuntos por juego'),
       ],
     ),
     btnCancelColor: Colors.blueGrey.shade900,
